@@ -2,8 +2,13 @@
 #include <stdio.h>
 
 char *argv0;
-const char qc = '\'' ;
-const char bc = '\\' ;
+
+enum{
+	qc = '\'',
+	bc = '\\',
+};
+//const char qc = '\'' ;
+//const char bc = '\\' ;
 
 void
 usage(void)
@@ -17,8 +22,10 @@ islinefinished(char *s)
 {
 	int q = 0 ;
 	int b = 0 ;
+	int cnt = 0 ;
 	while(*s){
-		if(*s == qc){
+		switch(*s){
+		case qc :
 			if(q){
 				if(s[1] == qc)
 					++s;
@@ -27,13 +34,26 @@ islinefinished(char *s)
 			} else {
 				q = 1 ;
 			}
+			break;
+		case '{':
+		case '(':
+			if(q) break;
+			++cnt;
+			break;
+		case '}' :
+		case ')' :
+			if(q) break;
+			--cnt;
+			break;
+		default:
+			break;
 		}
 		++s;
 	}
 	if(*--s == bc)
 		b = 1 ;
 
-	return q||b ? 0 : 1 ;
+	return (q || b || cnt) ? 0 : 1 ;
 }
 
 int
