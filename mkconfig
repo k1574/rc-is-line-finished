@@ -1,4 +1,4 @@
 <$MKINCDIR/config
-PROGNAME = rc_is_line_finished
+PROGNAME = rc-is-line-finished
 CFILES = main.c
 
